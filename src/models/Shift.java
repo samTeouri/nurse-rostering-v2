@@ -8,10 +8,10 @@ import java.util.ArrayList;
  */
 public class Shift {
     private String id;
-    private Long length;
+    private int length;
     private ArrayList<String> shiftsThatcannotFollow;
 
-    public Shift(String id, Long length) {
+    public Shift(String id, int length) {
         this.id = id;
         this.length = length;
         this.shiftsThatcannotFollow = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Shift {
         return id;
     }
 
-    public Long getLength() {
+    public int getLength() {
         return length;
     }
 
