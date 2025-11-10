@@ -5,8 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import models.Cover;
+import models.DayOff;
 import models.Shift;
+import models.ShiftOffRequests;
+import models.ShiftOnRequests;
 import models.Staff;
 
 public class DataLoader {
@@ -16,9 +19,11 @@ public class DataLoader {
         while (true) {
             String line = bufferedReader.readLine();
             if (line == null) break;
-            if (line.startsWith("#") || line.equals("\n")) continue;
+            if (line.startsWith("#") || line.trim().isEmpty()) continue;
 
             if (line.startsWith("SECTION_HORIZON")) {
+                System.out.println("Loading horizon...");
+
                 bufferedReader.readLine();
                 bufferedReader.readLine();
                 line = bufferedReader.readLine();
@@ -26,14 +31,14 @@ public class DataLoader {
             }
 
             if (line.startsWith("SECTION_SHIFTS")) {
+                System.out.println("Loading shifts...");
+
                 ArrayList<Shift> shifts = new ArrayList<>();
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.equals("\n")) break;
+                    if (line == null || line.trim().isEmpty()) break;
                     if (line.startsWith("#")) continue;
-
-                    System.out.println(line.equals("\n"));
                     
                     String[] shiftAttributes = line.split(",");
 
@@ -54,12 +59,13 @@ public class DataLoader {
             }
 
             if (line.startsWith("SECTION_STAFF")) {
+                System.out.println("Loading staffs...");
+
                 ArrayList<Staff> staffs = new ArrayList<>();
                 while (true) {
                     line = bufferedReader.readLine();
-                    System.out.println(line);
                     
-                    if (line == null || line.equals("\n")) break;
+                    if (line == null || line.trim().isEmpty()) break;
                     if (line.startsWith("#")) continue;
                     
                     String[] staffAttributes = line.split(",");
@@ -76,18 +82,108 @@ public class DataLoader {
 
                     String[] maxShiftsStringFormat = staffAttributes[1].split("\\|");
 
-                    HashMap<String, String> maxShifts = new HashMap<>();
-
                     for (String s : maxShiftsStringFormat) {
                         String[] pair = s.split("=");
                         staff.addMaxShift(pair[0], pair[1]);
                     }
 
-                    System.out.println(staff);
+                    staffs.add(staff);
+                }
+            }
+
+            if (line.startsWith("SECTION_DAYS_OFF")) {
+                System.out.println("Loading days off...");
+
+                ArrayList<DayOff> daysOffArray = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] daysOffAttributes = line.split(",");
+
+                    DayOff dayOff = new DayOff(
+                        daysOffAttributes[0],
+                        Integer.parseInt(daysOffAttributes[1])
+                    );
+
+                    daysOffArray.add(dayOff);
+                }
+            }
+
+            if (line.startsWith("SECTION_SHIFT_ON_REQUESTS")) {
+                System.out.println("Loading shifts on requests...");
+
+                ArrayList<ShiftOnRequests> shiftOnRequestsArray = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] shiftAttributes = line.split(",");
+
+                    ShiftOnRequests shiftOnRequests = new ShiftOnRequests(
+                        shiftAttributes[0],
+                        Integer.parseInt(shiftAttributes[1]),
+                        shiftAttributes[2],
+                        Integer.parseInt(shiftAttributes[3])
+                    );
+
+                    shiftOnRequestsArray.add(shiftOnRequests);
+                }
+            }
+
+            if (line.startsWith("SECTION_SHIFT_OFF_REQUESTS")) {
+                System.out.println("Loading shifts off requests...");
+
+                ArrayList<ShiftOffRequests> shiftOffRequestsArray = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] shiftAttributes = line.split(",");
+
+                    ShiftOffRequests shiftOffRequests = new ShiftOffRequests(
+                        shiftAttributes[0],
+                        Integer.parseInt(shiftAttributes[1]),
+                        shiftAttributes[2],
+                        Integer.parseInt(shiftAttributes[3])
+                    );
+
+                    shiftOffRequestsArray.add(shiftOffRequests);
+                }
+            }
+
+            if (line.startsWith("SECTION_COVER")) {
+                System.out.println("Loading covers...");
+
+                ArrayList<Cover> covers = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] coverAttributes = line.split(",");
+
+                    Cover cover = new Cover(
+                        Integer.parseInt(coverAttributes[0]),
+                        coverAttributes[1],
+                        Integer.parseInt(coverAttributes[2]),
+                        Integer.parseInt(coverAttributes[3]),
+                        Integer.parseInt(coverAttributes[4])
+                    );
+
+                    covers.add(cover);
                 }
             }
 
         }
+
         bufferedReader.close();
     }
 }

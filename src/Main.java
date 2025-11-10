@@ -6,9 +6,8 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            
             DataLoader dataLoader = new DataLoader();
-            dataLoader.load("src/data/instances/Instance1.txt");
+            dataLoader.load("src/data/instances/Instance15.txt");
         } catch (IOException e) {
             System.err.println("An error occurred : " + e.getMessage());
         }
