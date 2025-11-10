@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import models.DayOff;
 import models.Shift;
+import models.ShiftOffRequests;
 import models.ShiftOnRequests;
 import models.Staff;
 
@@ -88,6 +90,28 @@ public class DataLoader {
                 }
             }
 
+            if (line.startsWith("SECTION_DAYS_OFF")) {
+                System.out.println("Loading days off...");
+
+                ArrayList<DayOff> daysOffArray = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] daysOffAttributes = line.split(",");
+
+                    DayOff dayOff = new DayOff(
+                        daysOffAttributes[0],
+                        Integer.parseInt(daysOffAttributes[1])
+                    );
+
+                    daysOffArray.add(dayOff);
+                    System.out.println(dayOff);
+                }
+            }
+
             if (line.startsWith("SECTION_SHIFT_ON_REQUESTS")) {
                 System.out.println("Loading shifts on requests...");
 
@@ -108,7 +132,31 @@ public class DataLoader {
                     );
 
                     shiftOnRequestsArray.add(shiftOnRequests);
-                    System.out.println(shiftOnRequests);
+                }
+            }
+
+            if (line.startsWith("SECTION_SHIFT_OFF_REQUESTS")) {
+                System.out.println("Loading shifts off requests...");
+
+                ArrayList<ShiftOffRequests> shiftOffRequestsArray = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] shiftAttributes = line.split(",");
+
+                    ShiftOffRequests shiftOffRequests = new ShiftOffRequests(
+                        shiftAttributes[0],
+                        Integer.parseInt(shiftAttributes[1]),
+                        shiftAttributes[2],
+                        Integer.parseInt(shiftAttributes[3])
+                    );
+
+                    shiftOffRequestsArray.add(shiftOffRequests);
+
+                    System.out.println(shiftOffRequests);
                 }
             }
 
