@@ -1,4 +1,3 @@
-
 import java.io.IOException;
 import tools.DataLoader;
 
@@ -9,7 +8,7 @@ public class Main {
         try {
             
             DataLoader dataLoader = new DataLoader();
-            dataLoader.load("src/data/instances/Instance15.txt");
+            dataLoader.load("src/data/instances/Instance1.txt");
         } catch (IOException e) {
             System.err.println("An error occurred : " + e.getMessage());
         }
