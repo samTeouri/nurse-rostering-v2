@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import models.Cover;
 import models.DayOff;
 import models.Shift;
 import models.ShiftOffRequests;
@@ -108,7 +109,6 @@ public class DataLoader {
                     );
 
                     daysOffArray.add(dayOff);
-                    System.out.println(dayOff);
                 }
             }
 
@@ -155,8 +155,30 @@ public class DataLoader {
                     );
 
                     shiftOffRequestsArray.add(shiftOffRequests);
+                }
+            }
 
-                    System.out.println(shiftOffRequests);
+            if (line.startsWith("SECTION_COVER")) {
+                System.out.println("Loading covers...");
+
+                ArrayList<Cover> covers = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] coverAttributes = line.split(",");
+
+                    Cover cover = new Cover(
+                        Integer.parseInt(coverAttributes[0]),
+                        coverAttributes[1],
+                        Integer.parseInt(coverAttributes[2]),
+                        Integer.parseInt(coverAttributes[3]),
+                        Integer.parseInt(coverAttributes[4])
+                    );
+
+                    covers.add(cover);
                 }
             }
 
