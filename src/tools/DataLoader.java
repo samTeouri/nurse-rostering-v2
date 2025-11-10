@@ -16,9 +16,11 @@ public class DataLoader {
         while (true) {
             String line = bufferedReader.readLine();
             if (line == null) break;
-            if (line.startsWith("#") || line.equals("\n")) continue;
+            if (line.startsWith("#") || line.trim().isEmpty()) continue;
 
             if (line.startsWith("SECTION_HORIZON")) {
+                System.out.println("Loading horizon...");
+
                 bufferedReader.readLine();
                 bufferedReader.readLine();
                 line = bufferedReader.readLine();
@@ -26,14 +28,14 @@ public class DataLoader {
             }
 
             if (line.startsWith("SECTION_SHIFTS")) {
+                System.out.println("Loading shifts...");
+
                 ArrayList<Shift> shifts = new ArrayList<>();
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.equals("\n")) break;
+                    if (line == null || line.trim().isEmpty()) break;
                     if (line.startsWith("#")) continue;
-
-                    System.out.println(line.equals("\n"));
                     
                     String[] shiftAttributes = line.split(",");
 
@@ -54,12 +56,13 @@ public class DataLoader {
             }
 
             if (line.startsWith("SECTION_STAFF")) {
+                System.out.println("Loading staffs...");
+
                 ArrayList<Staff> staffs = new ArrayList<>();
                 while (true) {
                     line = bufferedReader.readLine();
-                    System.out.println(line);
                     
-                    if (line == null || line.equals("\n")) break;
+                    if (line == null || line.trim().isEmpty()) break;
                     if (line.startsWith("#")) continue;
                     
                     String[] staffAttributes = line.split(",");
@@ -82,12 +85,11 @@ public class DataLoader {
                         String[] pair = s.split("=");
                         staff.addMaxShift(pair[0], pair[1]);
                     }
-
-                    System.out.println(staff);
                 }
             }
 
         }
+
         bufferedReader.close();
     }
 }
