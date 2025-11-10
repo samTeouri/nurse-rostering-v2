@@ -1,8 +1,18 @@
-[
-    {
-        "type": "command",
-        "details": {
-            "key": "workbench.action.debug.runWithoutDebugging"
+{
+    "type": "command",
+    "details": {
+        "key": "workbench.action.debug.runWithoutDebugging"
+    },
+    "configurations": [
+        
+        {
+            // ...existing code...
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "console": "integratedTerminal"
+            // ...existing code...
         }
-    }
-]
+    ]
+}
