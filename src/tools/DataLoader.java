@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import models.Shift;
+import models.ShiftOnRequests;
 import models.Staff;
 
 public class DataLoader {
@@ -79,12 +79,36 @@ public class DataLoader {
 
                     String[] maxShiftsStringFormat = staffAttributes[1].split("\\|");
 
-                    HashMap<String, String> maxShifts = new HashMap<>();
-
                     for (String s : maxShiftsStringFormat) {
                         String[] pair = s.split("=");
                         staff.addMaxShift(pair[0], pair[1]);
                     }
+
+                    staffs.add(staff);
+                }
+            }
+
+            if (line.startsWith("SECTION_SHIFT_ON_REQUESTS")) {
+                System.out.println("Loading shifts on requests...");
+
+                ArrayList<ShiftOnRequests> shiftOnRequestsArray = new ArrayList<>();
+                while (true) {
+                    line = bufferedReader.readLine();
+                    
+                    if (line == null || line.trim().isEmpty()) break;
+                    if (line.startsWith("#")) continue;
+                    
+                    String[] shiftAttributes = line.split(",");
+
+                    ShiftOnRequests shiftOnRequests = new ShiftOnRequests(
+                        shiftAttributes[0],
+                        Integer.parseInt(shiftAttributes[1]),
+                        shiftAttributes[2],
+                        Integer.parseInt(shiftAttributes[3])
+                    );
+
+                    shiftOnRequestsArray.add(shiftOnRequests);
+                    System.out.println(shiftOnRequests);
                 }
             }
 
