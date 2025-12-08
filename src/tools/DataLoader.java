@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import models.Cover;
+import models.DataModel;
 import models.DayOff;
 import models.Shift;
 import models.ShiftOffRequests;
@@ -14,8 +15,17 @@ import models.Staff;
 
 public class DataLoader {
     
-    public void load(String filePath) throws FileNotFoundException, IOException {
+    /**
+     * @param filePath
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public DataModel load(String filePath) throws FileNotFoundException, IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+
+        DataModel dataModel = new DataModel();
+
         while (true) {
             String line = bufferedReader.readLine();
             if (line == null) break;
@@ -28,6 +38,8 @@ public class DataLoader {
                 bufferedReader.readLine();
                 line = bufferedReader.readLine();
                 int horizon = Integer.parseInt(line.trim());
+
+                dataModel.setHorizon(horizon);
             }
 
             if (line.startsWith("SECTION_SHIFTS")) {
@@ -37,7 +49,10 @@ public class DataLoader {
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.trim().isEmpty()) break;
+                    if (line == null || line.trim().isEmpty()) {
+                        dataModel.setShifts(shifts.toArray(new Shift[0]));
+                        break;
+                    };
                     if (line.startsWith("#")) continue;
                     
                     String[] shiftAttributes = line.split(",");
@@ -65,7 +80,10 @@ public class DataLoader {
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.trim().isEmpty()) break;
+                    if (line == null || line.trim().isEmpty()) {
+                        dataModel.setStaffs(staffs.toArray(new Staff[0]));
+                        break;
+                    }
                     if (line.startsWith("#")) continue;
                     
                     String[] staffAttributes = line.split(",");
@@ -98,7 +116,10 @@ public class DataLoader {
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.trim().isEmpty()) break;
+                    if (line == null || line.trim().isEmpty()) {
+                        dataModel.setDaysOff(daysOffArray.toArray(new DayOff[0]));
+                        break;
+                    }
                     if (line.startsWith("#")) continue;
                     
                     String[] daysOffAttributes = line.split(",");
@@ -119,7 +140,10 @@ public class DataLoader {
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.trim().isEmpty()) break;
+                    if (line == null || line.trim().isEmpty()) {
+                        dataModel.setShiftOnRequests(shiftOnRequestsArray.toArray(new ShiftOnRequests[0]));
+                        break;
+                    }
                     if (line.startsWith("#")) continue;
                     
                     String[] shiftAttributes = line.split(",");
@@ -142,7 +166,10 @@ public class DataLoader {
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.trim().isEmpty()) break;
+                    if (line == null || line.trim().isEmpty()) {
+                        dataModel.setShiftOffRequests(shiftOffRequestsArray.toArray(new ShiftOffRequests[0]));
+                        break;
+                    }
                     if (line.startsWith("#")) continue;
                     
                     String[] shiftAttributes = line.split(",");
@@ -165,7 +192,10 @@ public class DataLoader {
                 while (true) {
                     line = bufferedReader.readLine();
                     
-                    if (line == null || line.trim().isEmpty()) break;
+                    if (line == null || line.trim().isEmpty()) {
+                        dataModel.setCovers(covers.toArray(new Cover[0]));
+                        break;
+                    }
                     if (line.startsWith("#")) continue;
                     
                     String[] coverAttributes = line.split(",");
@@ -185,5 +215,10 @@ public class DataLoader {
         }
 
         bufferedReader.close();
+
+        System.out.println("Data loading completed.");
+
+        return dataModel;
+
     }
 }

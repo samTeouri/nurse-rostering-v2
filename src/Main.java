@@ -1,4 +1,5 @@
 import java.io.IOException;
+import models.DataModel;
 import tools.DataLoader;
 
 public class Main {
@@ -7,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             DataLoader dataLoader = new DataLoader();
-            dataLoader.load("src/data/instances/Instance15.txt");
+            DataModel dataModel = dataLoader.load("src/data/instances/Instance1.txt");
         } catch (IOException e) {
             System.err.println("An error occurred : " + e.getMessage());
         }
