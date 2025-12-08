@@ -9,12 +9,12 @@ import java.util.ArrayList;
 public class Shift {
     private String id;
     private int length;
-    private ArrayList<String> shiftsThatcannotFollow;
+    private ArrayList<String> shiftsThatCannotFollow;
 
     public Shift(String id, int length) {
         this.id = id;
         this.length = length;
-        this.shiftsThatcannotFollow = new ArrayList<>();
+        this.shiftsThatCannotFollow = new ArrayList<>();
     }
 
     public String getId() {
@@ -25,16 +25,16 @@ public class Shift {
         return length;
     }
 
-    public ArrayList<String> getShiftsThatcannotFollow() {
-        return shiftsThatcannotFollow;
+    public ArrayList<String> getShiftsThatCannotFollow() {
+        return shiftsThatCannotFollow;
     }
 
     public void addShiftThatCannotFollow(String shiftId) {
-        this.shiftsThatcannotFollow.add(shiftId);
+        this.shiftsThatCannotFollow.add(shiftId);
     }
 
     @Override
     public String toString() {
-        return "Shift{" + "id=" + id + ", length=" + length + ", shiftsThatcannotFollow=" + shiftsThatcannotFollow + '}';
+        return "Shift{" + "id=" + id + ", length=" + length + ", shiftsThatCannotFollow=" + shiftsThatCannotFollow + '}';
     }
 }
