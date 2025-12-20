@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class DataModel {
     private int horizon;
@@ -88,6 +89,22 @@ public class DataModel {
 
     public void setShiftOffRequests(ArrayList<ShiftOffRequests> shiftOffRequests) {
         this.shiftOffRequests = shiftOffRequests;
+    }
+
+    public ArrayList<Integer> getStaffDaysOff(String staffId) {
+        return (ArrayList<Integer>) this.getDaysOff()
+            .stream()
+            .filter(dayOff -> dayOff.getStaffId().equals(staffId))
+            .map(dayOff -> dayOff.getDay())
+            .collect(Collectors.toList());
+    }
+
+    public ArrayList<String> getStaffShiftOffRequestsIds(String staffId) {
+        return (ArrayList<String>) this.getShiftOffRequests()
+            .stream()
+            .filter(shiftOffRequest -> shiftOffRequest.getStaffId().equals(staffId))
+            .map(shiftOffRequest -> shiftOffRequest.getShiftId())
+            .collect(Collectors.toList());
     }
 
     @Override

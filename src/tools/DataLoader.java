@@ -50,7 +50,7 @@ public class DataLoader {
                     line = bufferedReader.readLine();
                     
                     if (line == null || line.trim().isEmpty()) {
-                        dataModel.setShifts(shifts.toArray(new Shift[0]));
+                        dataModel.setShifts(shifts);
                         break;
                     };
                     if (line.startsWith("#")) continue;
@@ -81,7 +81,7 @@ public class DataLoader {
                     line = bufferedReader.readLine();
                     
                     if (line == null || line.trim().isEmpty()) {
-                        dataModel.setStaffs(staffs.toArray(new Staff[0]));
+                        dataModel.setStaffs(staffs);
                         break;
                     }
                     if (line.startsWith("#")) continue;
@@ -117,7 +117,7 @@ public class DataLoader {
                     line = bufferedReader.readLine();
                     
                     if (line == null || line.trim().isEmpty()) {
-                        dataModel.setDaysOff(daysOffArray.toArray(new DayOff[0]));
+                        dataModel.setDaysOff(daysOffArray);
                         break;
                     }
                     if (line.startsWith("#")) continue;
@@ -141,7 +141,7 @@ public class DataLoader {
                     line = bufferedReader.readLine();
                     
                     if (line == null || line.trim().isEmpty()) {
-                        dataModel.setShiftOnRequests(shiftOnRequestsArray.toArray(new ShiftOnRequests[0]));
+                        dataModel.setShiftOnRequests(shiftOnRequestsArray);
                         break;
                     }
                     if (line.startsWith("#")) continue;
@@ -167,7 +167,7 @@ public class DataLoader {
                     line = bufferedReader.readLine();
                     
                     if (line == null || line.trim().isEmpty()) {
-                        dataModel.setShiftOffRequests(shiftOffRequestsArray.toArray(new ShiftOffRequests[0]));
+                        dataModel.setShiftOffRequests(shiftOffRequestsArray);
                         break;
                     }
                     if (line.startsWith("#")) continue;
@@ -193,7 +193,7 @@ public class DataLoader {
                     line = bufferedReader.readLine();
                     
                     if (line == null || line.trim().isEmpty()) {
-                        dataModel.setCovers(covers.toArray(new Cover[0]));
+                        dataModel.setCovers(covers);
                         break;
                     }
                     if (line.startsWith("#")) continue;

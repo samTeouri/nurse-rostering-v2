@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import models.Assignment;
 import models.Cover;
 import models.DataModel;
+import models.Schedule;
 import models.Shift;
 import models.Staff;
 
 public class InitialSolutionBuilder {
     
-    public static ArrayList<Assignment> build(DataModel data) {
+    public static Schedule build(DataModel data) {
+
+        Schedule schedule = new Schedule();
+
+        HardConstraintChecker hcChecker = new HardConstraintChecker(data);
+
         for (int day = 1; day < data.getHorizon() + 1; day++) {
             for (Shift shift : data.getShifts()) {
                 int staffAssigned = 0;
@@ -18,12 +24,19 @@ public class InitialSolutionBuilder {
                 
                 while (staffAssigned < cover.getRequirement()) { 
                     for (Staff staff : data.getStaffs()) {
-                        
+                        Assignment assignment = new Assignment(day, shift, staff);
+
+                        if (hcChecker.isAssignmentFeasible(assignment, schedule)) {
+                            schedule.addAssignment(assignment);
+                            staffAssigned++;
+
+                            break;
+                        }
                     }
                 }
             }
         }
 
-        return new ArrayList<>();
+        return schedule;
     }
 }
