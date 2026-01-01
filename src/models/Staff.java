@@ -58,6 +58,10 @@ public class Staff {
         return MaxWeekends;
     }
 
+    public HashMap<String, String> getMaxShifts() {
+        return maxShifts;
+    }
+
     public void addMaxShift(String shift, String max) {
         this.maxShifts.put(shift, max);
     }
