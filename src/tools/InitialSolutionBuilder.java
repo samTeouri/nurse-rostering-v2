@@ -1,6 +1,5 @@
 package tools;
 
-import java.util.ArrayList;
 import models.Assignment;
 import models.Cover;
 import models.DataModel;
@@ -16,21 +15,32 @@ public class InitialSolutionBuilder {
 
         HardConstraintChecker hcChecker = new HardConstraintChecker(data);
 
-        for (int day = 1; day < data.getHorizon() + 1; day++) {
+        for (int day = 0; day < data.getHorizon(); day++) {
             for (Shift shift : data.getShifts()) {
                 int staffAssigned = 0;
 
                 Cover cover = data.getCover(day, shift.getId());
-                
-                while (staffAssigned < cover.getRequirement()) { 
-                    for (Staff staff : data.getStaffs()) {
-                        Assignment assignment = new Assignment(day, shift, staff);
+                for (Staff staff : data.getStaffs()) {
+                    Assignment assignment = new Assignment(day, shift, staff);
 
-                        if (hcChecker.isAssignmentFeasible(assignment, schedule)) {
-                            schedule.addAssignment(assignment);
-                            staffAssigned++;
-
+                    if (hcChecker.isAssignmentFeasible(assignment, schedule)) {
+                        schedule.addAssignment(assignment);
+                        staffAssigned++;
+                        if (staffAssigned >= cover.getRequirement()) {
                             break;
+                        }
+                    }
+                }
+                if (!hcChecker.isScheduleFeasible(schedule)) {
+                    for (Assignment a : schedule.getAssignments()) {
+                        if (!hcChecker.checkC1(a, schedule.getAssignments())
+                            || !hcChecker.checkC2(a, schedule.getAssignments())
+                            || !hcChecker.checkC3(a, schedule.getAssignments())
+                            || !hcChecker.checkC4(a, schedule.getAssignments())
+                            || !hcChecker.checkC5(a, schedule.getAssignments())
+                            || !hcChecker.checkC8(a, schedule.getAssignments())
+                            || !hcChecker.checkC9(a)) {
+                            schedule.getAssignments().remove(a);
                         }
                     }
                 }

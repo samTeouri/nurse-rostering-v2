@@ -48,12 +48,30 @@ public class HardConstraintChecker {
             && checkC6All(A)
             && checkC7All(A)
             && checkC8All(A)
-            && checkC9All(A)
-            && checkC10All(A);
+            && checkC9All(A);
     }
 
-    private boolean checkC1(Assignment c, List<Assignment> A) {
-        for (Assignment a : A) {
+    public Map<String, Boolean> hardConstraintReport(Schedule schedule) {
+        List<Assignment> A = schedule.getAssignments();
+
+        Map<String, Boolean> report = new HashMap<>();
+        report.put("C1", checkC1All(A));
+        report.put("C2", checkC2All(A));
+        report.put("C3", checkC3All(A));
+        report.put("C4", checkC4All(A));
+        report.put("C5", checkC5All(A));
+        report.put("C6", checkC6All(A));
+        report.put("C7", checkC7All(A));
+        report.put("C8", checkC8All(A));
+        report.put("C9", checkC9All(A));
+        report.put("C10", checkC10All(A));
+        return report;
+    }
+
+    public boolean checkC1(Assignment c, List<Assignment> A) {
+        List<Assignment> A_copy = new ArrayList<>(A);
+        A_copy.remove(c);  // To avoid checking against itself
+        for (Assignment a : A_copy) {
             if (a.getStaff().getId().equals(c.getStaff().getId())
                 && a.getDay() == c.getDay()) {
                 return false;
@@ -73,7 +91,7 @@ public class HardConstraintChecker {
     }
 
 
-    private boolean checkC2(Assignment c, List<Assignment> A) {
+    public boolean checkC2(Assignment c, List<Assignment> A) {
         for (Assignment a : A) {
             if (a.getStaff().getId().equals(c.getStaff().getId())
                 && a.getDay() == c.getDay() - 1
@@ -102,7 +120,7 @@ public class HardConstraintChecker {
     }
 
 
-    private boolean checkC3(Assignment c, List<Assignment> A) {
+    public boolean checkC3(Assignment c, List<Assignment> A) {
         int maxAllowed = Integer.parseInt(c.getStaff().getMaxShifts().get(c.getShift().getId()));
         int count = 0;
         for (Assignment a : A) {
@@ -133,10 +151,13 @@ public class HardConstraintChecker {
     }
 
 
-    private boolean checkC4(Assignment c, List<Assignment> A) {
+    public boolean checkC4(Assignment c, List<Assignment> A) {
         int totalMinutes = 0;
 
-        for (Assignment a : A) {
+        List<Assignment> A_copy = new ArrayList<>(A);
+        A_copy.remove(c);
+
+        for (Assignment a : A_copy) {
             if (a.getStaff().getId().equals(c.getStaff().getId())) {
                 totalMinutes += a.getShift().getLength();
             }
@@ -162,7 +183,7 @@ public class HardConstraintChecker {
         return true;
     }
 
-    private boolean checkC5(Assignment c, List<Assignment> A) {
+    public boolean checkC5(Assignment c, List<Assignment> A) {
         List<Integer> days = new ArrayList<>();
         for (Assignment a : A) {
             if (a.getStaff().getId().equals(c.getStaff().getId())) {
@@ -278,7 +299,7 @@ public class HardConstraintChecker {
         return true;
     }
 
-    private boolean checkC8(Assignment c, List<Assignment> A) {
+    public boolean checkC8(Assignment c, List<Assignment> A) {
 
         Set<Integer> weekendsWorked = new HashSet<>();
 
@@ -316,10 +337,11 @@ public class HardConstraintChecker {
     }
 
     private boolean isWeekend(int day) {
-        return day % 7 == 6 || day % 7 == 0;
+        int dayOfWeek = day % 7;
+        return dayOfWeek == 5 || dayOfWeek == 6;
     }
 
-    private boolean checkC9(Assignment c) {
+    public boolean checkC9(Assignment c) {
         return !data
                 .getStaffDaysOff(c.getStaff().getId())
                 .contains(c.getDay());

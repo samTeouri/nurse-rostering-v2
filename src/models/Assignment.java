@@ -34,4 +34,8 @@ public class Assignment {
     public void setShift(Shift shift) {
         this.shift = shift;
     }
+
+    public String toString() {
+        return "Day " + day + ": Staff " + staff.getId() + " -> Shift " + shift.getId();
+    }
 }
