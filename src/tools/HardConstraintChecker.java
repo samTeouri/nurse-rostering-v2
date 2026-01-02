@@ -46,7 +46,8 @@ public class HardConstraintChecker {
             && checkC4All(A)
             && checkC5All(A)
             && checkC8All(A)
-            && checkC9All(A);
+            && checkC9All(A)
+            && checkC10All(A);
     }
 
     public Map<String, Boolean> hardConstraintReport(Schedule schedule) {

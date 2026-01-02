@@ -107,6 +107,14 @@ public class DataModel {
             .collect(Collectors.toList());
     }
 
+    public ArrayList<String> getStaffShiftOnRequestsIds(String staffId) {
+        return (ArrayList<String>) this.getShiftOnRequests()
+            .stream()
+            .filter(shiftOnRequest -> shiftOnRequest.getStaffId().equals(staffId))
+            .map(shiftOnRequest -> shiftOnRequest.getShiftId())
+            .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         return "DataModel{" + "horizon=" + horizon + ", daysOff=" + daysOff + ", shifts=" + shifts + ", staffs=" + staffs + ", covers=" + covers + ", shiftOnRequests=" + shiftOnRequests + ", shiftOffRequests=" + shiftOffRequests + '}';
