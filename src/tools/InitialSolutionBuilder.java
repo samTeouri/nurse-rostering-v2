@@ -17,35 +17,26 @@ public class InitialSolutionBuilder {
 
         for (int day = 0; day < data.getHorizon(); day++) {
             for (Shift shift : data.getShifts()) {
-                int staffAssigned = 0;
 
                 Cover cover = data.getCover(day, shift.getId());
+                int staffAssigned = 0;
+
                 for (Staff staff : data.getStaffs()) {
+
+                    if (staffAssigned >= cover.getRequirement()) {
+                        break;
+                    }
+
                     Assignment assignment = new Assignment(day, shift, staff);
 
                     if (hcChecker.isAssignmentFeasible(assignment, schedule)) {
                         schedule.addAssignment(assignment);
                         staffAssigned++;
-                        if (staffAssigned >= cover.getRequirement()) {
-                            break;
-                        }
-                    }
-                }
-                if (!hcChecker.isScheduleFeasible(schedule)) {
-                    for (Assignment a : schedule.getAssignments()) {
-                        if (!hcChecker.checkC1(a, schedule.getAssignments())
-                            || !hcChecker.checkC2(a, schedule.getAssignments())
-                            || !hcChecker.checkC3(a, schedule.getAssignments())
-                            || !hcChecker.checkC4(a, schedule.getAssignments())
-                            || !hcChecker.checkC5(a, schedule.getAssignments())
-                            || !hcChecker.checkC8(a, schedule.getAssignments())
-                            || !hcChecker.checkC9(a)) {
-                            schedule.getAssignments().remove(a);
-                        }
                     }
                 }
             }
         }
+
 
         return schedule;
     }

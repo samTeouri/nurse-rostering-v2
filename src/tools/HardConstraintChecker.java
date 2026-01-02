@@ -45,8 +45,6 @@ public class HardConstraintChecker {
             && checkC3All(A)
             && checkC4All(A)
             && checkC5All(A)
-            && checkC6All(A)
-            && checkC7All(A)
             && checkC8All(A)
             && checkC9All(A);
     }
@@ -178,7 +176,6 @@ public class HardConstraintChecker {
         for (Staff s : minutes.keySet()) {
             int total = minutes.get(s);
             if (total > s.getMaxTotalMinutes()) return false;
-            if (total < s.getMinTotalMinutes()) return false;
         }
         return true;
     }
@@ -235,7 +232,7 @@ public class HardConstraintChecker {
     }
 
 
-    private boolean checkC6All(List<Assignment> A) {
+    public boolean checkC6All(List<Assignment> A) {
         Map<Staff, List<Integer>> daysByStaff = new HashMap<>();
 
         for (Assignment a : A) {
@@ -267,7 +264,7 @@ public class HardConstraintChecker {
         return true;
     }
 
-    private boolean checkC7All(List<Assignment> A) {
+    public boolean checkC7All(List<Assignment> A) {
 
         int H = data.getHorizon();
 
