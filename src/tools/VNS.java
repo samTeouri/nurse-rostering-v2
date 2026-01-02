@@ -42,7 +42,7 @@ public class VNS {
         Set<Integer> tabuMemory = new HashSet<>();
         tabuMemory.add(best.hashCode());
 
-        int nbNeighborhoods = 4; // Nombre de voisinages différents
+        int nbNeighborhoods = 5; // Nombre de voisinages différents
 
         // Boucle principale de la VNS
         for (int iter = 0; iter < maxIterations; iter++) {
@@ -75,10 +75,12 @@ public class VNS {
      * @return Un voisin de la solution ou null si aucun voisin valide
      */
     private Schedule generateNeighbor(Schedule s, int k) {
-        if (k == 1) return swapTwoAssignments(s);
-        if (k == 2) return moveAssignment(s);
-        if (k == 3) return swapTwoShifts(s);
-        if (k == 4) return invertBlock(s);
+        if (k == 1) return addAssignment(s);
+        if (k == 2) return swapTwoAssignments(s);
+        if (k == 3) return moveAssignment(s);
+        if (k == 4) return swapTwoShifts(s);
+        if (k == 5) return invertBlock(s);
+        
         return null;
     }
 
@@ -201,6 +203,27 @@ public class VNS {
         return copy;
     }
 
+    private Schedule addAssignment(Schedule s) {
+        Schedule copy = s.deepCopy();
+        Random rand = new Random();
 
+        int day = rand.nextInt(data.getHorizon());
+        Shift shift = data.getShifts().get(rand.nextInt(data.getShifts().size()));
+
+        // Vérifie si la couverture est insuffisante
+        int current = copy.countAssignments(day, shift);
+        int required = data.getCover(day, shift.getId()).getRequirement();
+
+        if (current >= required) return null;
+
+        for (Staff staff : data.getStaffs()) {
+            Assignment a = new Assignment(day, shift, staff);
+            if (hc.isAssignmentFeasible(a, copy)) {
+                copy.addAssignment(a);
+                return copy;
+            }
+        }
+        return null;
+    }
 
 }

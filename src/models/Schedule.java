@@ -30,6 +30,16 @@ public class Schedule {
         assignments.add(a);
     }
 
+    public int countAssignments(int day, Shift shift) {
+        int count = 0;
+        for (Assignment a : assignments) {
+            if (a.getDay() == day && a.getShift().getId().equals(shift.getId())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Assignment a : assignments) {

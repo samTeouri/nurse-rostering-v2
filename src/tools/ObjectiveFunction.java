@@ -11,10 +11,21 @@ public class ObjectiveFunction {
     
     private final DataModel data;
 
-    private static final int Q_ON = 5;
-    private static final int P_OFF = 10;
-    private static final int V_MIN = 20;
-    private static final int V_MAX = 15;
+    // Niveau 1 — Couverture (très élevé)
+    private static final int V_MIN = 1000;   // sous-couverture
+    private static final int V_MAX = 1000;    // sur-couverture
+
+    // Niveau 2 — Demandes OFF
+    private static final int P_OFF = 20;
+
+    // Niveau 3 — Demandes ON
+    private static final int Q_ON = 10;
+
+    // Niveau 4 — Équité / confort
+    private static final int W_MIN_WORKLOAD = 5;
+    private static final int W_MIN_CONSEC_WORK = 5;
+    private static final int W_MIN_CONSEC_OFF = 5;
+
 
     /**
      * Constructeur de la fonction objectif.
@@ -36,6 +47,9 @@ public class ObjectiveFunction {
         cost += penaltyShiftOffRequests(schedule);
         cost += penaltyUnderCover(schedule);
         cost += penaltyOverCover(schedule);
+        cost += W_MIN_WORKLOAD * penaltyMinWorkload(schedule);
+        cost += W_MIN_CONSEC_WORK * penaltyMinConsecutiveWork(schedule);
+        cost += W_MIN_CONSEC_OFF * penaltyMinConsecutiveOff(schedule);
 
         return cost;
     }
@@ -129,5 +143,98 @@ public class ObjectiveFunction {
         }
         return cost;
     }
+
+    private int penaltyMinWorkload(Schedule schedule) {
+        Map<Staff, Integer> worked = new HashMap<>();
+
+        for (Assignment a : schedule.getAssignments()) {
+            worked.merge(
+                a.getStaff(),
+                a.getShift().getLength(),
+                Integer::sum
+            );
+        }
+
+        int penalty = 0;
+
+        for (Staff s : data.getStaffs()) {
+            int total = worked.getOrDefault(s, 0);
+            if (total < s.getMinTotalMinutes()) {
+                penalty += (s.getMinTotalMinutes() - total);
+            }
+        }
+        return penalty;
+    }
+
+    private int penaltyMinConsecutiveWork(Schedule schedule) {
+        Map<Staff, List<Integer>> daysByStaff = new HashMap<>();
+
+        for (Assignment a : schedule.getAssignments()) {
+            daysByStaff
+                .computeIfAbsent(a.getStaff(), k -> new ArrayList<>())
+                .add(a.getDay());
+        }
+
+        int penalty = 0;
+
+        for (Staff s : data.getStaffs()) {
+            int min = s.getMinConsecutiveShifts();
+            if (min <= 1) continue;
+
+            List<Integer> days = daysByStaff.getOrDefault(s, List.of());
+            Collections.sort(days);
+
+            int streak = 1;
+            for (int i = 1; i < days.size(); i++) {
+                if (days.get(i) == days.get(i - 1) + 1) {
+                    streak++;
+                } else {
+                    if (streak < min) {
+                        penalty += (min - streak);
+                    }
+                    streak = 1;
+                }
+            }
+            if (streak < min) penalty += (min - streak);
+        }
+        return penalty;
+    }
+
+    private int penaltyMinConsecutiveOff(Schedule schedule) {
+        int H = data.getHorizon();
+        Map<Staff, Set<Integer>> workedDays = new HashMap<>();
+
+        for (Assignment a : schedule.getAssignments()) {
+            workedDays
+                .computeIfAbsent(a.getStaff(), k -> new HashSet<>())
+                .add(a.getDay());
+        }
+
+        int penalty = 0;
+
+        for (Staff s : data.getStaffs()) {
+            int minOff = s.getMinConsecutiveDaysOff();
+            if (minOff <= 1) continue;
+
+            Set<Integer> work = workedDays.getOrDefault(s, Set.of());
+
+            int offStreak = 0;
+            for (int d = 0; d < H; d++) {
+                if (!work.contains(d)) {
+                    offStreak++;
+                } else {
+                    if (offStreak > 0 && offStreak < minOff) {
+                        penalty += (minOff - offStreak);
+                    }
+                    offStreak = 0;
+                }
+            }
+            if (offStreak > 0 && offStreak < minOff) {
+                penalty += (minOff - offStreak);
+            }
+        }
+        return penalty;
+    }
+
 
 }

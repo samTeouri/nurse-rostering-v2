@@ -23,7 +23,7 @@ public class Main {
         try {
             // Chargement des données depuis le fichier d'instance
             DataLoader dataLoader = new DataLoader();
-            DataModel dataModel = dataLoader.load("src/data/instances/Instance3.txt");
+            DataModel dataModel = dataLoader.load("src/data/instances/Instance1.txt");
             System.out.println("Building initial solution...\n");
             // Construction d'une solution initiale faisable
             Schedule schedule = InitialSolutionBuilder.build(dataModel);
@@ -31,7 +31,7 @@ public class Main {
             // Application de la métaheuristique VNS pour améliorer la solution
             VNS vns = new VNS(dataModel);
             long startTime = System.currentTimeMillis();
-            Schedule improvedSchedule = vns.solve(schedule, 1000);
+            Schedule improvedSchedule = vns.solve(schedule, 100000);
             long endTime = System.currentTimeMillis();
 
             // Trier les assignments par jour
