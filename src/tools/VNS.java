@@ -203,19 +203,30 @@ public class VNS {
         return copy;
     }
 
+    /**
+     * Voisinage : ajoute une nouvelle affectation pour améliorer la couverture d'un shift.
+     * Sélectionne un jour et un shift aléatoirement, puis tente d'ajouter un staff si la couverture est insuffisante.
+     * @param s La solution courante
+     * @return Une nouvelle solution avec une affectation ajoutée ou null si aucune addition faisable
+     */
     private Schedule addAssignment(Schedule s) {
         Schedule copy = s.deepCopy();
         Random rand = new Random();
 
+        // Sélectionne un jour aléatoire
         int day = rand.nextInt(data.getHorizon());
+        // Sélectionne un shift aléatoire
         Shift shift = data.getShifts().get(rand.nextInt(data.getShifts().size()));
 
-        // Vérifie si la couverture est insuffisante
+        // Vérifie le nombre d'affectations déjà présentes pour ce jour et ce shift
         int current = copy.countAssignments(day, shift);
+        // Récupère le besoin de couverture pour ce shift ce jour-là
         int required = data.getCover(day, shift.getId()).getRequirement();
 
+        // Si la couverture est déjà suffisante, on ne fait rien
         if (current >= required) return null;
 
+        // On tente d'ajouter un staff disponible et faisable
         for (Staff staff : data.getStaffs()) {
             Assignment a = new Assignment(day, shift, staff);
             if (hc.isAssignmentFeasible(a, copy)) {
@@ -223,6 +234,7 @@ public class VNS {
                 return copy;
             }
         }
+        // Aucun ajout faisable trouvé
         return null;
     }
 
