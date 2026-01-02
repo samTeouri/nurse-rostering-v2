@@ -11,6 +11,11 @@ public class Assignment {
         this.staff = staff;
     }
 
+    public Assignment deepCopy() {
+        // Staff et Shift sont supposés immuables ou partagés (sinon il faut aussi les copier)
+        return new Assignment(this.day, this.shift, this.staff);
+    }
+
     public int getDay() {
         return day;
     }

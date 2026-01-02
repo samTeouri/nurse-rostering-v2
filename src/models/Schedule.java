@@ -14,6 +14,14 @@ public class Schedule {
         this.assignments = new ArrayList<>(assignments);
     }
 
+    public Schedule deepCopy() {
+        ArrayList<Assignment> copiedAssignments = new ArrayList<>();
+        for (Assignment a : this.assignments) {
+            copiedAssignments.add(a.deepCopy());
+        }
+        return new Schedule(copiedAssignments);
+    }
+
     public List<Assignment> getAssignments() {
         return assignments;
     }

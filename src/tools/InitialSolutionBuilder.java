@@ -7,8 +7,16 @@ import models.Schedule;
 import models.Shift;
 import models.Staff;
 
+/**
+ * Classe utilitaire pour construire une solution initiale faisable au problème de nurse rostering.
+ */
 public class InitialSolutionBuilder {
     
+    /**
+     * Construit une solution initiale en respectant les contraintes du problème.
+     * @param data Le modèle de données du problème
+     * @return Un planning initial faisable
+     */
     public static Schedule build(DataModel data) {
 
         Schedule schedule = new Schedule();

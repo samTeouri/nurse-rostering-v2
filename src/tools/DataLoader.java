@@ -13,6 +13,9 @@ import models.ShiftOffRequests;
 import models.ShiftOnRequests;
 import models.Staff;
 
+/**
+ * Classe utilitaire pour charger les données d'une instance depuis un fichier texte.
+ */
 public class DataLoader {
     
     /**
@@ -20,6 +23,13 @@ public class DataLoader {
      * @return
      * @throws FileNotFoundException
      * @throws IOException
+     */
+    /**
+     * Charge les données d'une instance à partir d'un fichier.
+     * @param filePath Chemin du fichier d'instance
+     * @return Un objet DataModel rempli avec les données du fichier
+     * @throws FileNotFoundException Si le fichier n'est pas trouvé
+     * @throws IOException En cas d'erreur de lecture
      */
     public DataModel load(String filePath) throws FileNotFoundException, IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));

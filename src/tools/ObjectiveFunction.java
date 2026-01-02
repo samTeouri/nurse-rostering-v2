@@ -3,6 +3,10 @@ package tools;
 import java.util.*;
 import models.*;
 
+/**
+ * Classe utilitaire pour évaluer la qualité d'un planning (fonction objectif).
+ * Calcule le coût total d'une solution selon différents critères de pénalité.
+ */
 public class ObjectiveFunction {
     
     private final DataModel data;
@@ -12,10 +16,19 @@ public class ObjectiveFunction {
     private static final int V_MIN = 20;
     private static final int V_MAX = 15;
 
+    /**
+     * Constructeur de la fonction objectif.
+     * @param data Le modèle de données du problème
+     */
     public ObjectiveFunction(DataModel data) {
         this.data = data;
     }
 
+    /**
+     * Évalue le coût total d'un planning selon les pénalités définies.
+     * @param schedule Le planning à évaluer
+     * @return Le score total (plus il est bas, meilleure est la solution)
+     */
     public int evaluate(Schedule schedule) {
         int cost = 0;
 
@@ -27,6 +40,9 @@ public class ObjectiveFunction {
         return cost;
     }
 
+    /**
+     * Calcule la pénalité pour les demandes de shifts ON non satisfaites.
+     */
     private int penaltyShiftOnRequests(Schedule schedule) {
         int cost = 0;
 
@@ -44,6 +60,9 @@ public class ObjectiveFunction {
         return cost;
     }
     
+    /**
+     * Calcule la pénalité pour les demandes de shifts OFF non respectées.
+     */
     private int penaltyShiftOffRequests(Schedule schedule) {
         int cost = 0;
 
@@ -57,6 +76,9 @@ public class ObjectiveFunction {
         return cost;
     }
 
+    /**
+     * Calcule la pénalité pour sous-couverture des shifts.
+     */
     private int penaltyUnderCover(Schedule schedule) {
         int cost = 0;
 
@@ -81,6 +103,9 @@ public class ObjectiveFunction {
         return cost;
     }
 
+    /**
+     * Calcule la pénalité pour sur-couverture des shifts.
+     */
     private int penaltyOverCover(Schedule schedule) {
         int cost = 0;
 

@@ -14,14 +14,28 @@ import models.DataModel;
 import models.Schedule;
 import models.Staff;
 
+/**
+ * Classe utilitaire pour vérifier le respect des contraintes du problème de nurse rostering.
+ * Permet de valider la faisabilité d'une affectation ou d'un planning complet.
+ */
 public class HardConstraintChecker {
 
     private final DataModel data;
 
+    /**
+     * Constructeur du vérificateur de contraintes.
+     * @param data Le modèle de données du problème
+     */
     public HardConstraintChecker(DataModel data) {
         this.data = data;
     }
 
+    /**
+     * Vérifie si une affectation candidate est faisable dans un planning partiel.
+     * @param candidate L'affectation à tester
+     * @param partialSchedule Le planning partiel courant
+     * @return true si l'affectation respecte toutes les contraintes, false sinon
+     */
     public boolean isAssignmentFeasible(
             Assignment candidate,
             Schedule partialSchedule) {
@@ -37,6 +51,11 @@ public class HardConstraintChecker {
             && checkC9(candidate);
     }
 
+    /**
+     * Vérifie si un planning complet respecte toutes les contraintes du problème.
+     * @param schedule Le planning à tester
+     * @return true si le planning est faisable, false sinon
+     */
     public boolean isScheduleFeasible(Schedule schedule) {
         List<Assignment> A = schedule.getAssignments();
 
@@ -50,6 +69,11 @@ public class HardConstraintChecker {
             && checkC10All(A);
     }
 
+    /**
+     * Génère un rapport détaillé sur le respect de chaque contrainte pour un planning donné.
+     * @param schedule Le planning à analyser
+     * @return Un dictionnaire associant chaque contrainte à un booléen (respectée ou non)
+     */
     public Map<String, Boolean> hardConstraintReport(Schedule schedule) {
         List<Assignment> A = schedule.getAssignments();
 
