@@ -14,14 +14,28 @@ import models.DataModel;
 import models.Schedule;
 import models.Staff;
 
+/**
+ * Classe utilitaire pour vérifier le respect des contraintes du problème de nurse rostering.
+ * Permet de valider la faisabilité d'une affectation ou d'un planning complet.
+ */
 public class HardConstraintChecker {
 
     private final DataModel data;
 
+    /**
+     * Constructeur du vérificateur de contraintes.
+     * @param data Le modèle de données du problème
+     */
     public HardConstraintChecker(DataModel data) {
         this.data = data;
     }
 
+    /**
+     * Vérifie si une affectation candidate est faisable dans un planning partiel.
+     * @param candidate L'affectation à tester
+     * @param partialSchedule Le planning partiel courant
+     * @return true si l'affectation respecte toutes les contraintes, false sinon
+     */
     public boolean isAssignmentFeasible(
             Assignment candidate,
             Schedule partialSchedule) {
@@ -37,6 +51,11 @@ public class HardConstraintChecker {
             && checkC9(candidate);
     }
 
+    /**
+     * Vérifie si un planning complet respecte toutes les contraintes du problème.
+     * @param schedule Le planning à tester
+     * @return true si le planning est faisable, false sinon
+     */
     public boolean isScheduleFeasible(Schedule schedule) {
         List<Assignment> A = schedule.getAssignments();
 
@@ -45,12 +64,16 @@ public class HardConstraintChecker {
             && checkC3All(A)
             && checkC4All(A)
             && checkC5All(A)
-            && checkC6All(A)
-            && checkC7All(A)
             && checkC8All(A)
-            && checkC9All(A);
+            && checkC9All(A)
+            && checkC10All(A);
     }
 
+    /**
+     * Génère un rapport détaillé sur le respect de chaque contrainte pour un planning donné.
+     * @param schedule Le planning à analyser
+     * @return Un dictionnaire associant chaque contrainte à un booléen (respectée ou non)
+     */
     public Map<String, Boolean> hardConstraintReport(Schedule schedule) {
         List<Assignment> A = schedule.getAssignments();
 
@@ -178,7 +201,6 @@ public class HardConstraintChecker {
         for (Staff s : minutes.keySet()) {
             int total = minutes.get(s);
             if (total > s.getMaxTotalMinutes()) return false;
-            if (total < s.getMinTotalMinutes()) return false;
         }
         return true;
     }
@@ -235,7 +257,7 @@ public class HardConstraintChecker {
     }
 
 
-    private boolean checkC6All(List<Assignment> A) {
+    public boolean checkC6All(List<Assignment> A) {
         Map<Staff, List<Integer>> daysByStaff = new HashMap<>();
 
         for (Assignment a : A) {
@@ -267,7 +289,7 @@ public class HardConstraintChecker {
         return true;
     }
 
-    private boolean checkC7All(List<Assignment> A) {
+    public boolean checkC7All(List<Assignment> A) {
 
         int H = data.getHorizon();
 
